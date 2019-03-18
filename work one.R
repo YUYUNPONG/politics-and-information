@@ -52,9 +52,38 @@ gca$Date = as.POSIXct(gca$Date,format = "%Y/%m/%d %H:%M:%S")
 plot(khb$Date, khb$LIKE_COUNT, type = "p", col="blue")###WHY USE LIKE COUNT??
 lines(gcb$Date, gcb$LIKE_COUNT,type="p", col="red")
 
-##兩候選人like count趨勢圖
+##兩候選人All_Reaction_Count趨勢圖
 plot(khb$Date, khb$All_Reaction_Count,xlab ="Date",ylab = "count"  ,type = "l",col = "blue")
 lines(gcb$Date, gcb$All_Reaction_Count,col = "green")
 
 plot(kha$Date, kha$All_Reaction_Count,xlab ="Date",ylab = "count"  ,type = "l",col = "blue")
 lines(gca$Date, gca$All_Reaction_Count,col = "green")
+
+
+#####################
+date111$Page_Name_nchar=nchar(date111$Message)
+date121$Page_Name_nchar=nchar(date121$Message)
+ggscatter(date121,x="All_Reaction_Count",y="LIKE_COUNT", add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson")
+ggqqplot(date121$All_Reaction_Count)  #常態分佈
+ggqqplot(date121$LIKE_COUNT)          #常態分佈
+
+cor(chen[6:14])%>%corrplot.mixed(lower = "pie",tl.cex=0.6)
+# method = c("pearson", "kendall", "spearman")
+
+
+###以每月為分析依據
+library(ggplot2)
+khb <- data.frame( 
+  month = c(7, 8, 9, 10, 11,12), 
+  posts = khb) 
+print(khb) 
+ggplot(khb, aes(x = month, y = posts)) + geom_bar(stat = "identity") + labs(title="韓國瑜")
+
+
+##############################
+library(readLines)
+readLines(Message)
+install.packages("wordcloud")
+library(wordcloud)
+d <- data.frame(word = names(wordtable), freq = as.numeric(wordtable))
